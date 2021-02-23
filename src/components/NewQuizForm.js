@@ -2,7 +2,7 @@ import React from 'react';
 //import { firestoreConnect } from 'react-redux-firebase';
 //import PropTypes from 'prop-types';
 import { useFirestore } from 'react-redux-firebase';
-import Question from './Question';
+//import Question from './Question';
 //import QuizControl from './QuizControl';
 
 function NewQuizForm(props){
@@ -10,45 +10,37 @@ function NewQuizForm(props){
 
   function addQuizToFirestore(event) {
     event.preventDefault();
-    //props.onNewQuizCreation();
-    const quiz = {
-      quizName: event.target.quizName.value,
-      category: event.target.category.value,
-      questions:[]
-    }
-    event.target.foreach(question => 
-      this.quiz.questions.push({
-        questionText: event.target.question.questionName.value,
-        correctAnswer:event.target.question.correctAnswer.value,
-        answerOptions: [
-          event.target.question.correctAnswer.value,
-          event.target.question.option2.value,
-          event.target.question.option3.value,
-          event.target.question.option4.value
-        ]
-      }))
-    return firestore.collection('quizzes').add(quiz)
-    // let quiz = [event.target.querySelectorAll(".test")];
-    // // const mapped = quiz.map(group => {
-    // //   return group.children
-    // // })
-    // console.log(quiz);
-    // console.log(event.target.test);
-    // console.log(event.target.test.question);
-    // console.log(event.target.question.value);
-    // // return firestore.collection('quizzes').add(quiz)
+    props.onNewQuizCreation();
+    
+    return firestore.collection('quizzes').add(
+      {
+        quizName: event.target.name.value,
+        description: event.target.description.value,
+        question1: event.target.question1.value,
+        question2: event.target.question2.value,
+        question3: event.target.question3.value,
+        question4: event.target.question4.value,
+      }
+    );
+    
   }
 
   return (
     <>
       <form onSubmit={addQuizToFirestore}>
+        <label htmlFor='quizName'>Quiz Name</label>
         <input type='text' name="quizName" placeholder="Your Quiz Name" />
-        <input type='text' name="category" placeholder="Your Quiz Category" />
+        <label htmlFor='description'>Description</label>
+        <input type='text' name="description" placeholder="Description of Quiz" />
         <br/>
-        <div className="test">
-          <Question />
-
-        </div>
+        <label htmlFor='question1'>Question1</label>
+        <textarea type='text' name='question1' /><br/>
+        <label htmlFor='question1'>Question2</label>
+        <textarea type='text' name='question2' /><br/>
+        <label htmlFor='question1'>Question3</label>
+        <textarea type='text' name='question3' /><br/>
+        <label htmlFor='question1'>Question4</label>
+        <textarea type='text' name='question4' /><br/>
 
         <button type='submit'>Submit</button>
       </form>
@@ -58,3 +50,4 @@ function NewQuizForm(props){
 
 }
 export default NewQuizForm;
+
