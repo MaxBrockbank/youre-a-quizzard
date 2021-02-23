@@ -1,9 +1,8 @@
 import React from 'react';
-//import { firestoreConnect } from 'react-redux-firebase';
-//import PropTypes from 'prop-types';
+// import { firestoreConnect } from 'react-redux-firebase';
+import PropTypes from 'prop-types';
 import { useFirestore } from 'react-redux-firebase';
-//import Question from './Question';
-//import QuizControl from './QuizControl';
+
 
 function NewQuizForm(props){
   const firestore = useFirestore();
@@ -14,7 +13,7 @@ function NewQuizForm(props){
     
     return firestore.collection('quizzes').add(
       {
-        quizName: event.target.name.value,
+        quizName: event.target.quizName.value,
         description: event.target.description.value,
         question1: event.target.question1.value,
         question2: event.target.question2.value,
@@ -22,7 +21,6 @@ function NewQuizForm(props){
         question4: event.target.question4.value,
       }
     );
-    
   }
 
   return (
@@ -48,6 +46,9 @@ function NewQuizForm(props){
     </>
   )
 
+}
+NewQuizForm.propTypes = {
+  onNewQuizCreation: PropTypes.func
 }
 export default NewQuizForm;
 

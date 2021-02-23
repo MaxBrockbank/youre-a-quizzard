@@ -1,15 +1,57 @@
 import React from 'react';
 import NewQuizForm from './NewQuizForm';
+import QuizList from './QuizList';
+//import QuizDetail from './QuizDetail';
+//import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
-import QuizList from './QuizList';
+import { withFirestore, isLoaded } from 'react-redux-firebase';
 
 class QuizControl extends React.Component {
-  // HANDLERS
   
-  handelNewQuiz(){
+  // HANDLERS
+  handleClick = () => {
+    const { dispatch } = this.props
+    if(this.props.selectedQuiz != null){
+      if(this.props.formVisibleOnPage){
+        const action = a.toggleForm();
+        dispatch(action);
+      }
+      const action2 = a.clearSelect();
+      dispatch(action2)
+      if(this.props.editing){
+        const action3 = a.toggleEdit();
+        dispatch(action3);
+      }
+    }else{
+      const action = a.toggleForm();
+      dispatch(action);
+    }
+  }
+  handleNewQuiz = () => {
     const { dispatch } = this.props;
     const action = a.toggleForm();
+    dispatch(action);
+  }
+  handleChangingSelectedQuiz = (id) => {
+    this.props.firestore.get({collection: 'quizzes', doc: id}).then((quiz) =>{
+      const firestoreQuiz = {
+        quizName: quiz.get('quizName'),
+        description: quiz.get('description'),
+        question1: quiz.get('question1'),
+        question2: quiz.get('question2'),
+        question3: quiz.get('question3'),
+        question4: quiz.get('question4'),
+        id: quiz.id
+      }
+      this.setState({selectedQuiz: firestoreQuiz});
+    });
+    
+  }
+
+  handleEditClick = () => {
+    const {dispatch} = this.props;
+    const action = a.toggleEdit();
     dispatch(action);
   }
 
@@ -21,7 +63,8 @@ class QuizControl extends React.Component {
       currentlyVisibleState = <NewQuizForm onNewQuizCreation={this.handleNewQuiz}/>
       buttonText = 'Return to Quiz List'
     }else {
-      currentlyVisibleState = <QuizList quizList={this.props.mainQuizList} />
+      currentlyVisibleState = <QuizList quizList={this.props.mainQuizList} onQuizSelection={this.handleChangingSelectedQuiz}/>
+      buttonText = 'Create Quiz'
     }
     return(
       <>
@@ -34,10 +77,12 @@ class QuizControl extends React.Component {
 }
 const mapStateToProps = state => {
   return{
-    formVisibleOnPage: state.formVisibleOnPage
+    formVisibleOnPage: state.formVisibleOnPage,
+    mainQuizList: state.mainQuizList,
+    selectedQuiz: state.selectedQuiz,
+    editing: state.editing
   }
 }
-
 QuizControl = connect(mapStateToProps)(QuizControl);
 
-export default QuizControl;
+export default withFirestore(QuizControl);
