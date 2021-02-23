@@ -17,7 +17,9 @@ function QuizList(props){
         <hr/>
         {quizzes.map((quiz) => {
           return <Quiz
-          whenQuizClicked = {props.onQuizSelection}
+          id={quiz.id}
+          key={quiz.id}
+          whenQuizClicked = {()=>props.onQuizSelection(quiz.id)}
           quizName={quiz.quizName}
           description={quiz.description}
           question1= {quiz.question1}

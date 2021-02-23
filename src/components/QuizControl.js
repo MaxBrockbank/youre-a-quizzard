@@ -5,7 +5,7 @@ import QuizList from './QuizList';
 //import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
-import { withFirestore, isLoaded } from 'react-redux-firebase';
+import { withFirestore } from 'react-redux-firebase';
 
 class QuizControl extends React.Component {
   
@@ -34,7 +34,9 @@ class QuizControl extends React.Component {
     dispatch(action);
   }
   handleChangingSelectedQuiz = (id) => {
-    this.props.firestore.get({collection: 'quizzes', doc: id}).then((quiz) =>{
+    const {dispatch} = this.props;
+    this.props.firestore.get({collection:'quizzes', doc: id}).then((quiz) => {
+      console.log(this.props.firestore.get({collection:'quizzes', doc: id}));
       const firestoreQuiz = {
         quizName: quiz.get('quizName'),
         description: quiz.get('description'),
@@ -44,9 +46,10 @@ class QuizControl extends React.Component {
         question4: quiz.get('question4'),
         id: quiz.id
       }
-      this.setState({selectedQuiz: firestoreQuiz});
-    });
-    
+      const action = a.selectQuiz(firestoreQuiz);
+      dispatch(action);
+      console.log(firestoreQuiz);
+    })
   }
 
   handleEditClick = () => {
