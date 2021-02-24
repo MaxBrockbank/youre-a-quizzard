@@ -1,7 +1,7 @@
 import React from 'react';
 import NewQuizForm from './NewQuizForm';
 import QuizList from './QuizList';
-//import QuizDetail from './QuizDetail';
+import QuizDetail from './QuizDetail';
 //import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
@@ -57,12 +57,26 @@ class QuizControl extends React.Component {
     const action = a.toggleEdit();
     dispatch(action);
   }
+  handleDeletingQuiz = (id) => {
+    const { dispatch } = this.props;
+    this.props.firestore.delete({collection: 'quizzes', doc: id});
+    const action = a.clearSelect();
+    dispatch(action);
+  }
 
   render(){
     //CONDITION RENDERING
     let currentlyVisibleState = null;
     let buttonText = null;
-    if (this.props.formVisibleOnPage) {
+    if (this.props.selectedQuiz != null){
+      currentlyVisibleState=
+      <QuizDetail
+      quiz = {this.props.selectQuiz}
+      onClickingDelete= {this.handleDeletingQuiz}
+      onClickingEdit= {this.handleEditClick}
+      />
+      buttonText = 'Return to Quiz List'
+    }else if (this.props.formVisibleOnPage) {
       currentlyVisibleState = <NewQuizForm onNewQuizCreation={this.handleNewQuiz}/>
       buttonText = 'Return to Quiz List'
     }else {
