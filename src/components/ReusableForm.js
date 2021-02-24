@@ -2,20 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 function ReusableForm(props) {
-  const quizName = props.quiz ? props.quiz.quizName : 'Name';
-  const description = props.quiz ? props.quiz.description : 'Description';
-  const question1 = props.quiz ? props.quiz.question1 : 'Question 1';
-  const question2 = props.quiz ? props.quiz.question2 : 'Question 2';
-  const question3 = props.quiz ? props.quiz.question3 : 'Question 3';
-  const question4 = props.quiz ? props.quiz.question4 : 'Question 4';
+  const quizName = props.quiz ? props.quiz.quizName : '';
+  const description = props.quiz ? props.quiz.description : '';
+  const question1 = props.quiz ? props.quiz.question1 : '';
+  const question2 = props.quiz ? props.quiz.question2 : '';
+  const question3 = props.quiz ? props.quiz.question3 : '';
+  const question4 = props.quiz ? props.quiz.question4 : '';
 
   return(
     <>
       <form onSubmit={props.formSubmissionHandler}>
         <label htmlFor='quizName'>Quiz Name</label>
-        <input type='text' name="quizName" defaultValue={quizName} />
+        <input type='text' name="quizName" defaultValue={quizName} placeholder='Name your quiz'/>
         <label htmlFor='description'>Description</label>
-        <input type='text' name="description" defaultValue={description} />
+        <input type='text' name="description" defaultValue={description} placeholder='Add a description'/>
         <br/>
         <label htmlFor='question1'>Question1</label>
         <textarea type='text' name='question1' defaultValue={question1}/><br/>

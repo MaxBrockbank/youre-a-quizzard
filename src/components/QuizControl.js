@@ -2,7 +2,7 @@ import React from 'react';
 import NewQuizForm from './NewQuizForm';
 import QuizList from './QuizList';
 import QuizDetail from './QuizDetail';
-//import EditQuizForm from './EditQuizForm';
+import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
 import { withFirestore } from 'react-redux-firebase';
@@ -36,7 +36,6 @@ class QuizControl extends React.Component {
   handleChangingSelectedQuiz = (id) => {
     const {dispatch} = this.props;
     this.props.firestore.get({collection:'quizzes', doc: id}).then((quiz) => {
-      console.log(this.props.firestore.get({collection:'quizzes', doc: id}));
       const firestoreQuiz = {
         quizName: quiz.get('quizName'),
         description: quiz.get('description'),
@@ -48,7 +47,6 @@ class QuizControl extends React.Component {
       }
       const action = a.selectQuiz(firestoreQuiz);
       dispatch(action);
-      console.log(firestoreQuiz);
     })
   }
 
@@ -63,15 +61,28 @@ class QuizControl extends React.Component {
     const action = a.clearSelect();
     dispatch(action);
   }
+  handleEditQuizInList = () => {
+    const { dispatch } = this.props;
+    const action = a.toggleEdit();
+    const action2 = a.clearSelect();
+    dispatch(action);
+    dispatch(action2);
+  }
 
   render(){
     //CONDITION RENDERING
     let currentlyVisibleState = null;
     let buttonText = null;
-    if (this.props.selectedQuiz != null){
+    if(this.props.editing) {
+      currentlyVisibleState =
+      <EditQuizForm 
+      quiz={this.props.selectedQuiz} 
+      onEditQuiz={this.handleEditQuizInList}/>
+      buttonText = 'Return to Quiz List'
+    }else if (this.props.selectedQuiz != null){
       currentlyVisibleState=
       <QuizDetail
-      quiz = {this.props.selectQuiz}
+      quiz = {this.props.selectedQuiz}
       onClickingDelete= {this.handleDeletingQuiz}
       onClickingEdit= {this.handleEditClick}
       />

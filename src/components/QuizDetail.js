@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFirestore} from 'react-redux-firebase';
-import firebase from 'firebase/app';
+//import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 
 
 function QuizDetail(props){
-  const {onClickingDelete, onClickingEdit, quiz} = props;
+  const {onClickingDelete, onClickingEdit, quiz } = props;
   const firestore = useFirestore();
   function handleQuizResponse(event) {
     event.preventDefault();
@@ -18,10 +18,16 @@ function QuizDetail(props){
     }
     return firestore.collection('completedQuizzes').add(quizResponse);
   }
+  const updateAndDeleteBtn = 
+  <div>
+    <button onClick={onClickingEdit}>Edit Quiz</button>
+    <button onClick={() => onClickingDelete(quiz.id)}>Delete Quiz</button>
+  </div>
 
 
   return(
     <>
+      {console.log(quiz)}
       <h1>{quiz.quizName} - {quiz.description}</h1>
       <form id="responseForm" onSubmit={handleQuizResponse}>
         <h2>{quiz.question1}</h2>
@@ -32,13 +38,16 @@ function QuizDetail(props){
         <textarea name='response3' type='text' placeholder='Log your response here.'/>
         <h2>{quiz.question4}</h2>
         <textarea name='response4' type='text' placeholder='Log your response here.' />
+        <button type='submit'>Submit Response</button>
       </form>
+      {updateAndDeleteBtn}
     </>
   )
 }
 
 
 QuizDetail.propTypes = {
+  quiz: PropTypes.object,
   onClickingDelete: PropTypes.func,
   onClickingEdit: PropTypes.func
 }

@@ -14,9 +14,19 @@ export const toggleEdit = () => ({
 })
 
 
-export const selectQuiz = () => ({
-  type: c.SELECT_QUIZ
-})
+export const selectQuiz = (quiz) => {
+  const {quizName, description, question1, question2, question3, question4, id} = quiz;
+  return {
+  type: c.SELECT_QUIZ,
+  quizName,
+  description,
+  question1,
+  question2, 
+  question3,
+  question4,
+  id
+  }
+}
 
 export const clearSelect = () => ({
   type: c.CLEAR_SELECT
