@@ -4,3 +4,4 @@ export const SELECT_QUIZ = 'SELECT_QUIZ';
 export const CLEAR_SELECT = 'CLEAR_SELECT';
 export const TOGGLE_FORM = 'TOGGLE_FORM';
 export const TOGGLE_EDIT = 'TOGGLE_EDIT';
+export const TOGGLE_SIGNIN = 'TOGGLE_SIGNIN'

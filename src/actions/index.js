@@ -31,3 +31,7 @@ export const selectQuiz = (quiz) => {
 export const clearSelect = () => ({
   type: c.CLEAR_SELECT
 })
+
+export const toggleSignin = () => ({
+  type: c.TOGGLE_SIGNIN
+})
