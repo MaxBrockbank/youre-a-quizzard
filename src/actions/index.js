@@ -15,7 +15,7 @@ export const toggleEdit = () => ({
 
 
 export const selectQuiz = (quiz) => {
-  const {quizName, description, question1, question2, question3, question4, id} = quiz;
+  const {quizName, description, question1, question2, question3, question4, id, creatorId} = quiz;
   return {
   type: c.SELECT_QUIZ,
   quizName,
@@ -24,7 +24,8 @@ export const selectQuiz = (quiz) => {
   question2, 
   question3,
   question4,
-  id
+  id,
+  creatorId
   }
 }
 

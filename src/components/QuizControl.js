@@ -5,7 +5,7 @@ import QuizDetail from './QuizDetail';
 import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
-import { withFirestore } from 'react-redux-firebase';
+import { withFirestore, isLoaded} from 'react-redux-firebase';
 
 class QuizControl extends React.Component {
   
@@ -43,7 +43,8 @@ class QuizControl extends React.Component {
         question2: quiz.get('question2'),
         question3: quiz.get('question3'),
         question4: quiz.get('question4'),
-        id: quiz.id
+        id: quiz.id,
+        creatorId: quiz.get('creatorId')
       }
       const action = a.selectQuiz(firestoreQuiz);
       dispatch(action);
@@ -73,26 +74,43 @@ class QuizControl extends React.Component {
     //CONDITION RENDERING
     let currentlyVisibleState = null;
     let buttonText = null;
-    if(this.props.editing) {
-      currentlyVisibleState =
-      <EditQuizForm 
-      quiz={this.props.selectedQuiz} 
-      onEditQuiz={this.handleEditQuizInList}/>
-      buttonText = 'Return to Quiz List'
-    }else if (this.props.selectedQuiz != null){
-      currentlyVisibleState=
-      <QuizDetail
-      quiz = {this.props.selectedQuiz}
-      onClickingDelete= {this.handleDeletingQuiz}
-      onClickingEdit= {this.handleEditClick}
-      />
-      buttonText = 'Return to Quiz List'
-    }else if (this.props.formVisibleOnPage) {
-      currentlyVisibleState = <NewQuizForm onNewQuizCreation={this.handleNewQuiz}/>
-      buttonText = 'Return to Quiz List'
-    }else {
-      currentlyVisibleState = <QuizList quizList={this.props.mainQuizList} onQuizSelection={this.handleChangingSelectedQuiz}/>
-      buttonText = 'Create Quiz'
+    const auth = this.props.firebase.auth();
+    if(! isLoaded(auth)) {
+      return(
+        <>
+          <h1>Loading...</h1>
+        </>
+      )
+    }
+    if((isLoaded(auth)) && (auth.currentUser == null)) {
+      return(
+        <>
+          <h1>You must be signed in to access the queue.</h1>
+        </>
+      )
+    }
+    if ((isLoaded(auth)) && (auth.currentUser != null)) {
+      if(this.props.editing) {
+        currentlyVisibleState =
+        <EditQuizForm 
+        quiz={this.props.selectedQuiz} 
+        onEditQuiz={this.handleEditQuizInList}/>
+        buttonText = 'Return to Quiz List'
+      }else if (this.props.selectedQuiz != null){
+        currentlyVisibleState=
+        <QuizDetail
+        quiz = {this.props.selectedQuiz}
+        onClickingDelete= {this.handleDeletingQuiz}
+        onClickingEdit= {this.handleEditClick}
+        />
+        buttonText = 'Return to Quiz List'
+      }else if (this.props.formVisibleOnPage) {
+        currentlyVisibleState = <NewQuizForm onNewQuizCreation={this.handleNewQuiz}/>
+        buttonText = 'Return to Quiz List'
+      }else {
+        currentlyVisibleState = <QuizList quizList={this.props.mainQuizList} onQuizSelection={this.handleChangingSelectedQuiz}/>
+        buttonText = 'Create Quiz'
+      }
     }
     return(
       <>

@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useFirestore } from 'react-redux-firebase';
 import ReusableForm from './ReusableForm';
+import firebase from 'firebase/app';
 
 
 function NewQuizForm(props){
@@ -20,6 +21,7 @@ function NewQuizForm(props){
         question2: event.target.question2.value,
         question3: event.target.question3.value,
         question4: event.target.question4.value,
+        creatorId: firebase.auth().currentUser.uid
       }
     );
   }

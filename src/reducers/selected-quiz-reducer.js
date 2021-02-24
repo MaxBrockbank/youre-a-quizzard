@@ -1,7 +1,7 @@
 import * as c from './../actions/ActionTypes';
 
 export default (state=null, action) => {
-  const {quizName, description, question1, question2, question3, question4, id} = action;
+  const {quizName, description, question1, question2, question3, question4, id, creatorId} = action;
   switch(action.type){
     case c.SELECT_QUIZ:
       return {
@@ -11,7 +11,8 @@ export default (state=null, action) => {
         question2: question2,
         question3: question3,
         question4: question4,
-        id
+        id,
+        creatorId
       };
     case c.CLEAR_SELECT:
       return null;

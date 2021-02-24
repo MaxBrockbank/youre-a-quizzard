@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFirestore} from 'react-redux-firebase';
-//import firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 
 
@@ -14,19 +14,25 @@ function QuizDetail(props){
       response2: event.target.response2.value,
       response3: event.target.response3.value,
       response4: event.target.response4.value,
-      quizId: quiz.id
+      quizId: quiz.id,
+      responderId: firebase.auth().currentUser.uid
     }
     return firestore.collection('completedQuizzes').add(quizResponse);
   }
-  const updateAndDeleteBtn = 
-  <div>
-    <button onClick={onClickingEdit}>Edit Quiz</button>
-    <button onClick={() => onClickingDelete(quiz.id)}>Delete Quiz</button>
-  </div>
-
+  let updateAndDeleteBtn = null;
+  if(firebase.auth().currentUser.uid === quiz.creatorId) {
+    updateAndDeleteBtn =
+    <div>
+      <button onClick={onClickingEdit}>Edit Quiz</button>
+      <button onClick={() => onClickingDelete(quiz.id)}>Delete Quiz</button>
+    </div>
+  }
+  console.log(quiz.creatorId);
+  console.log(firebase.auth().currentUser.uid);
 
   return(
     <>
+      
       {console.log(quiz)}
       <h1>{quiz.quizName} - {quiz.description}</h1>
       <form id="responseForm" onSubmit={handleQuizResponse}>
