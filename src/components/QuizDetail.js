@@ -2,10 +2,12 @@ import React from 'react';
 import { useFirestore} from 'react-redux-firebase';
 import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
-
+import { useDispatch } from 'react-redux'
+import * as a from './../actions/index'
 
 function QuizDetail(props){
   const {onClickingDelete, onClickingEdit, quiz } = props;
+  const dispatch = useDispatch();
   const firestore = useFirestore();
   function handleQuizResponse(event) {
     event.preventDefault();
@@ -17,6 +19,8 @@ function QuizDetail(props){
       quizId: quiz.id,
       responderId: firebase.auth().currentUser.uid
     }
+    alert('Quiz responses have been submitted. Thank you.')
+    dispatch(a.clearSelect());
     return firestore.collection('completedQuizzes').add(quizResponse);
   }
   let updateAndDeleteBtn = null;

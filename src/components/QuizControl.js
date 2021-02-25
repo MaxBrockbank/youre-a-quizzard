@@ -6,6 +6,7 @@ import EditQuizForm from './EditQuizForm';
 import { connect } from 'react-redux';
 import * as a from './../actions/index';
 import { withFirestore, isLoaded} from 'react-redux-firebase';
+import firebase from 'firebase/app';
 
 class QuizControl extends React.Component {
   
@@ -75,6 +76,9 @@ class QuizControl extends React.Component {
     let currentlyVisibleState = null;
     let buttonText = null;
     const auth = this.props.firebase.auth();
+    
+    console.log(isLoaded(auth));
+    console.log(auth.currentUser);
     if(! isLoaded(auth)) {
       return(
         <>

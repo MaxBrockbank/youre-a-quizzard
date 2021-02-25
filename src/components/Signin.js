@@ -2,10 +2,13 @@ import React from 'react';
 import firebase from 'firebase/app';
 import * as a from './../actions/index';
 import { useSelector, useDispatch } from 'react-redux'
+// import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom'
 
 function Signin() {
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   function doSignUp(event) {
     event.preventDefault();
@@ -23,10 +26,13 @@ function Signin() {
     event.preventDefault();
     const email = event.target.signInEmail.value;
     const password = event.target.signInPassword.value;
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
-      console.log('Successfully Signed In')
-    }).catch(function(error){
-      console.log(error.message);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(()=>{
+        console.log('Successfully Signed In');
+        return history.push('/');    
+      }).catch(function(error){
+        console.log(error.message);
     });
   }
 
